@@ -5,10 +5,13 @@ import styles from "./navbar.module.css";
 import Link from "next/link";
 import { CiSearch, CiUser } from "react-icons/ci";
 import { BsCartDash } from "react-icons/bs";
+import { signOut, useSession } from "next-auth/react";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const status = "unauthenticated";
+  const { data, status } = useSession();
+
+  const name = data?.user?.name;
 
   return (
     <div className={styles.container}>
@@ -57,10 +60,27 @@ const Navbar = () => {
             Login
           </Link>
         ) : (
-          <CiUser />
+          <div className={styles.dropdown}>
+            <CiUser className={styles.user} />
+            <div className={styles.menu}>
+              <div className={styles.username}>
+                <p className={styles.welcome}>Welcome</p>
+                <h5 className={styles.name}>{name}</h5>
+              </div>
+              <Link href="/wishlist" className={styles.list}>
+                wishlist
+              </Link>
+              <div onClick={signOut} className={styles.list}>
+                logout
+              </div>
+            </div>
+          </div>
         )}
         <CiSearch />
-        <Link href="/cart" className={styles.cart}>
+
+        <Link
+          href={status === "unauthenticated" ? "/login" : "/cart"}
+          className={styles.cart}>
           <p>cart</p>
           <BsCartDash className={styles.cartIcon} />
         </Link>

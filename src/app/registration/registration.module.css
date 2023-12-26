@@ -68,6 +68,10 @@
   cursor: pointer;
 }
 
+.wrong{
+  color: red;
+}
+
 @media screen and (max-width: 640px) {
   .form{
     width: 400px;
